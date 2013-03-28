@@ -1,5 +1,5 @@
 #property link      ""
-string ea_version = "CASH ME IF YOU CAN v1.00";
+string ea_version = "CASH ME IF YOU CAN v1.10";
 
 //trade counter
 
@@ -21,6 +21,7 @@ extern bool EnableMAFilter = true;
 extern bool EnableHAFilter = true;
 extern bool EnableFractalFilter = true;
 extern bool EnableBreakOutFilter = true;
+extern bool EnableBreakOutSpreadFilter = false;
 extern bool EnableBackBoneFilter = true;
 extern bool EnableGaussFilter = true;
 extern bool EnableVolatilityFilter = true;
@@ -33,7 +34,7 @@ int FasterEMA = 15;
 int SlowerEMA = 30;
 
 // Moving Average
-int MAFastPeriod = 10;
+extern int MAFastPeriod = 10;
 extern int MASlowPeriod = 200;
 
 
@@ -155,6 +156,7 @@ double flagSlowMAInd = 1;
 double flagHAInd = 1;
 double flagFractalInd = 1;
 double flagBreakOutInd = 1;
+double flagBreakOutSpreadInd = 1;
 double flagGaussInd = 1;
 double flagBackBoneInd = 1;
 double flagVolatilityInd = 1;
@@ -194,6 +196,7 @@ double DM_TF_CURR_MIDDLE;
 double DM_TF_SUPP_RESISTANCE;
 double DM_TF_SUPP_SUPPORT;
 double DM_TF_SUPP_MIDDLE;   
+double DM_THRESHOLD;
 int TFSUP;
    
 /* Price vars */
@@ -245,7 +248,7 @@ double  K_Velocity           = 1.0;    //magnification stoploss of Velocity
 int      STOPLEVEL,n,DIGITS,SPREAD;
 double   BID,ASK,POINT,MARGININIT, OTP, StLo;
 string   SymbolTral,TekSymbol;
-int      Slippage      = 2;
+int      Slippage      = 0;
 //--------------------------------------------------------------------
 
 
@@ -283,18 +286,18 @@ if (Symbol() == "FRA40")
 {     
       if (Period() == PERIOD_M1){
          gperiod=5;
-         pnlSeuil = 7;   
+         pnlSeuil = 12;   
          pnlSeuilTolerance = 20;
          
          myStoploss=6;
          myTakeProfit=0;
-         myMaxStoploss=4;        
+         myMaxStoploss=5;        
 
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 6;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
          delta                = 3;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 2;
+         BreakOutDelta        = 3;
          
          magicNumber1 = 101;
          
@@ -302,11 +305,13 @@ if (Symbol() == "FRA40")
          SymbObjPoint2= 10; 
          SymbObjPoint3= 18;
          
+         DM_THRESHOLD = 15;
+         
          //p=-1;
                   
       }else if (Period() == PERIOD_M5){
          gperiod=7;
-         pnlSeuil = 13;   
+         pnlSeuil = 18;   
          pnlSeuilTolerance = 40;
            
          myStoploss=7;
@@ -324,6 +329,8 @@ if (Symbol() == "FRA40")
          SymbObjPoint3= 21;
         
          magicNumber1 = 105;
+         
+         DM_THRESHOLD = 40;
       } else {
          
          gperiod=10;
@@ -369,7 +376,7 @@ if (Symbol() == "FRA40")
 {
       if (Period() == PERIOD_M1){
          gperiod=5;
-         pnlSeuil = 8;   
+         pnlSeuil = 15;   
          pnlSeuilTolerance = 20;
          
          myStoploss=7;
@@ -388,10 +395,12 @@ if (Symbol() == "FRA40")
          
          
          magicNumber1 = 201;
+         
+         DM_THRESHOLD = 20;
                            
       }else if (Period() == PERIOD_M5){
          gperiod=7;
-         pnlSeuil = 18;   
+         pnlSeuil = 22;   
          pnlSeuilTolerance = 40;
            
          myStoploss=8;
@@ -409,6 +418,8 @@ if (Symbol() == "FRA40")
          SymbObjPoint3= 34;
         
          magicNumber1 = 205;
+         
+         DM_THRESHOLD = 60;
       } else {
          
          gperiod=10;
@@ -1039,6 +1050,7 @@ void CheckForEntryCondition(){
    if (!EnableFractalFilter) flagFractalInd=1;
    if (!flagVolatilityInd) flagVolatilityInd=1;
    if (!flagBreakOutInd) flagBreakOutInd=1;
+   if (!flagBreakOutSpreadInd) flagBreakOutSpreadInd=1;   
    if (!EnableBackBoneFilter) {flagGaussInd=1; backBoneCounterDown=0;}
    
    
@@ -1115,7 +1127,12 @@ void CheckForEntryCondition(){
       flagBreakOutInd = 0;
       if (ExtHAOpenPrevious <= DM_TF_CURR_RESISTANCE && ExtHACloseNow > DM_TF_CURR_RESISTANCE) flagBreakOutInd = 1;
       if (ExtHAOpenPrevious >= DM_TF_CURR_SUPPORT && ExtHACloseNow < DM_TF_CURR_SUPPORT) flagBreakOutInd = -1;
-   }    
+      
+      if ( DM_TF_CURR_RESISTANCE - DM_TF_CURR_SUPPORT < DM_THRESHOLD  && flagBreakOutInd == 1 ) flagBreakOutSpreadInd = 1;
+      if ( DM_TF_CURR_RESISTANCE - DM_TF_CURR_SUPPORT < DM_THRESHOLD  && flagBreakOutInd == -1) flagBreakOutSpreadInd = -1;      
+      
+
+   }  
    
    if (EnableBackBoneFilter)
    {
@@ -1373,24 +1390,24 @@ void stratSupportResistanceBreakOut()
    || StringFind(PriceBehavior, "PIVOT", 0) >= 0 
    ) return(NULL);
    
-   if ( flagGaussInd == 1 && flagFastMAInd == 1 && flagHAInd == 1 && (flagFractalInd == 1 || flagBreakOutInd == 1) && flagVolatilityInd == 1 && flagBreakOutInd == 1) 
+   if (flagBreakOutInd == 1) 
       PriceBehavior = "BREAKOUT - FRANCHISSEMENT RESISTANCE";
    
-   if ( flagGaussInd == -1 && flagFastMAInd == -1 && flagHAInd == -1 && (flagFractalInd == -1 || flagBreakOutInd == -1 )&& flagVolatilityInd == 1 && flagBreakOutInd == -1) 
+   if (flagBreakOutInd == -1) 
       PriceBehavior = "BREAKOUT - CASSAGE SUPPORT";
 
 
    if (StringFind(PriceBehavior, "BREAKOUT - FRANCHISSEMENT RESISTANCE") >=0)
    {
       if (ExtHACloseNow < DM_TF_CURR_RESISTANCE || flagGaussInd == -1 ||  flagHAInd == -1 ) PriceBehavior = ""; // PriceBehavior =  "BREAKOUT - FRANCHISSEMENT RESISTANCE - ECHEC" ;
-      if (flagGaussInd == 1 && flagHAInd == 1) PriceBehavior =  "BREAKOUT - FRANCHISSEMENT RESISTANCE - VALIDER" ;
+      if (flagGaussInd == 1 && flagHAInd == 1 && flagVolatilityInd == 1) PriceBehavior =  "BREAKOUT - FRANCHISSEMENT RESISTANCE - VALIDER" ;
       
    }
    
    if (StringFind(PriceBehavior, "BREAKOUT - CASSAGE SUPPORT") >= 0) 
    {
       if (ExtHACloseNow > DM_TF_CURR_SUPPORT || flagGaussInd == 1 ||  flagHAInd == 1) PriceBehavior = ""; // PriceBehavior =  "BREAKOUT - CASSAGE SUPPORT - ECHEC" ;
-      if (flagGaussInd == -1 && flagHAInd == -1 ) PriceBehavior =  "BREAKOUT - CASSAGE SUPPORT - VALIDER" ;
+      if (flagGaussInd == -1 && flagHAInd == -1 && flagVolatilityInd == 1) PriceBehavior =  "BREAKOUT - CASSAGE SUPPORT - VALIDER" ;
          
    }
    
@@ -1482,7 +1499,7 @@ void stratBackBoneTrader()
    
    //todo
    
-   if ( (flagSlowMAInd == -1 || MAFastNow < MASlowNow )
+   if ((MAFastNow < MASlowNow)
       && ((ExtHAOpenPrevious > BackBoneLow && ExtHAOpenPrevious < BackBoneHigh && ExtHAClosePrevious < BackBoneLow )
          || (ExtHAHighPrevious > BackBoneLow && ExtHAClosePrevious < MASlowNow )
          || flagBackBoneInd == -1
@@ -1490,7 +1507,7 @@ void stratBackBoneTrader()
       )
       PriceBehavior = "BACKBONE - COLONNE TOUCHEE PAR LE BAS" ;        
 
-   if ( (flagSlowMAInd == 1 || MAFastNow > MASlowNow)
+   if ((MAFastNow > MASlowNow)
       && ((ExtHAClosePrevious > BackBoneLow && ExtHAClosePrevious < BackBoneHigh && ExtHAOpenPrevious > BackBoneHigh)
          || (ExtHALowPrevious < BackBoneHigh && ExtHAClosePrevious > MASlowNow )
          || flagBackBoneInd == 1)
@@ -1502,8 +1519,8 @@ void stratBackBoneTrader()
    if (PriceBehavior == "BACKBONE - COLONNE TOUCHEE PAR LE BAS" && ExtHACloseNow > MASlowNow ) PriceBehavior = "";
    
    // step2
-   if (PriceBehavior == "BACKBONE - COLONNE TOUCHEE PAR LE HAUT" && ExtHACloseNow > MASlowNow && MAFastNow > MASlowNow && ExtHACloseNow > MAFastNow && (flagFastMAInd == 1 || flagHAInd == 1 || flagGaussInd == 1 )) PriceBehavior = "BACKBONE - ON REPART A LA HAUSSE";
-   if (PriceBehavior == "BACKBONE - COLONNE TOUCHEE PAR LE BAS"  && ExtHACloseNow < MASlowNow && MAFastNow < MASlowNow && ExtHACloseNow < MAFastNow && (flagFastMAInd == -1 || flagHAInd == -1 || flagGaussInd == -1)) PriceBehavior = "BACKBONE - ON REPART A LA BAISSE";
+   if (PriceBehavior == "BACKBONE - COLONNE TOUCHEE PAR LE HAUT" && ExtHACloseNow > MASlowNow && MAFastNow > MASlowNow && ExtHACloseNow > MAFastNow && flagGaussInd == 1)  PriceBehavior = "BACKBONE - ON REPART A LA HAUSSE";
+   if (PriceBehavior == "BACKBONE - COLONNE TOUCHEE PAR LE BAS"  && ExtHACloseNow < MASlowNow && MAFastNow < MASlowNow && ExtHACloseNow < MAFastNow && flagGaussInd == -1) PriceBehavior = "BACKBONE - ON REPART A LA BAISSE";
 
 
    // INVALIDATION STEP 2   
@@ -1544,7 +1561,7 @@ void getTradeDecision()
       SCENARIO : HARAMI
       TYPE DECISION = 6
    ************************************************** */   
-   //stratChandelierHarami();
+   stratChandelierHarami();
       
    /***************************************************
       SCENARIO 2: DYNAMIQUE ACHAT SUR SUPPORT / VENTE SUR ECHEC RESISTANCE
@@ -2611,6 +2628,9 @@ void displayComment()
    if (EnableHAFilter) txt=StringConcatenate( txt, " Heiken Ashi     ", flagHAInd , "\n");  
    if (EnableFractalFilter) txt=StringConcatenate( txt, " Fractal Sup/Res ", flagFractalInd , "\n");  
    if (EnableBreakOutFilter) txt=StringConcatenate( txt, " BreakOut Sup/Res ", flagBreakOutInd , "\n");  
+   if (EnableBreakOutSpreadFilter) txt=StringConcatenate( txt, " Spread BreakOut Sup/Res ", flagBreakOutSpreadInd , "\n");  
+   
+   
    if (EnableGaussFilter) txt=StringConcatenate( txt, " Gaussian Rain.  ", flagGaussInd , "\n");     
    if (EnableVolatilityFilter) txt=StringConcatenate( txt, " Volatility  ", flagVolatilityInd ,  " Fast = ",flagFastVolatilityInd, " Slow =", flagSlowVolatilityInd," \n");  
    if (EnableBackBoneFilter) txt=StringConcatenate( txt, " BackBone Band  ", flagBackBoneInd , " / CounterDown : " , backBoneCounterDown, " Current Spread ", MathRound(BackBoneHigh - BackBoneLow), " / Seuil :", MathRound(Bid * 0.01), "\n");  
@@ -2628,7 +2648,8 @@ void displayComment()
    if (MASlowDownNow != EMPTY_VALUE) txt=StringConcatenate( txt, " Slow Mov. Average DW  ", MASlowDownNow , "\n"); 
 
    txt=StringConcatenate( txt, " Resistance ", "TF=", DM_TF_CURR_RESISTANCE , " TF",TFSUP,"=", DM_TF_SUPP_RESISTANCE , "\n");   
-   txt=StringConcatenate( txt, " Support  ", "TF=", DM_TF_CURR_SUPPORT , " TF",TFSUP,"=", DM_TF_SUPP_SUPPORT , "\n");   
+   txt=StringConcatenate( txt, " Support  ", "TF=", DM_TF_CURR_SUPPORT , " TF",TFSUP,"=", DM_TF_SUPP_SUPPORT , "\n");
+   txt=StringConcatenate( txt, " THRESHOLD=" ,DM_THRESHOLD , " on " , DM_TF_CURR_RESISTANCE - DM_TF_CURR_SUPPORT, "\n");   
 
    /*txt=StringConcatenate( txt, " Price Chan High  ", priceChanHigh[1] , "\n"); 
    txt=StringConcatenate( txt, " Price Chan Low   ", priceChanLow[1] , "\n"); 
