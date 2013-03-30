@@ -284,8 +284,8 @@ if (Symbol() == "FRA40")
 {     
       if (Period() == PERIOD_M1){
          gperiod=5;
-         pnlSeuil = 12;   
-         pnlSeuilTolerance = 20;
+         pnlSeuil = 30;   
+         pnlSeuilTolerance = 100;
          
          myStoploss=3;
          myTakeProfit=0;
@@ -294,14 +294,14 @@ if (Symbol() == "FRA40")
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 6;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
-         delta                = 5;                          // offset from the fractal or candles or Parabolic 
+         delta                = 8;                          // offset from the fractal or candles or Parabolic 
          BreakOutDelta        = 3;
          
          magicNumber1 = 101;
          
-         SymbObjPoint1= 5;
-         SymbObjPoint2= 10; 
-         SymbObjPoint3= 18;
+         SymbObjPoint1= 8;
+         SymbObjPoint2= 12; 
+         SymbObjPoint3= 15;
          
          DM_THRESHOLD = 15;
          
@@ -1557,25 +1557,16 @@ void stratMedianeTrader()
    if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE HAUT")
    {
       if (ExtHACloseNow < DM_TF_CURR_MIDDLE)  PriceBehavior = "";
-      if (flagHAInd == 1 && flagGaussInd == 1 && ExtHACloseNow > FractalResPrevious) PriceBehavior = "MEDIANE - REBOND SUR SUPPORT";      
+      if (flagHAInd == 1 && flagGaussInd == 1 && flagFastMAInd == 1 && ExtHACloseNow > MASlowNow) 
+         PriceBehavior = "MEDIANE - REBOND SUR SUPPORT";      
+         
+         
    }
    
    if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE BAS")
    {
       if (ExtHACloseNow > DM_TF_CURR_MIDDLE)  PriceBehavior = "";
-      if (flagHAInd == -1 && flagGaussInd == -1 && ExtHACloseNow < FractalSupPrevious) PriceBehavior = "MEDIANE - RETOUR A LA BAISSE";      
-   }
-   
-   if (PriceBehavior == "MEDIANE - A ETE FRANCHI DU BAS VERS LE HAUT")
-   {
-      if (ExtHACloseNow < DM_TF_CURR_MIDDLE || flagHAInd == -1 || flagGaussInd == -1 || ExtHACloseNow < MAFastNow)  PriceBehavior = "";
-      if (flagHAInd == 1 && flagGaussInd == 1 && ExtHACloseNow > MAFastNow) PriceBehavior = "MEDIANE - A ETE FRANCHI DU BAS VERS LE HAUT - VALIDER";      
-   }
-   
-   if (PriceBehavior == "MEDIANE - A ETE FRANCHI DU HAUT VERS LE BAS")
-   {
-      if ((ExtHACloseNow > DM_TF_CURR_MIDDLE || flagHAInd == 1 || flagGaussInd == 1 || ExtHACloseNow > MAFastNow))  PriceBehavior = "";
-      if (flagHAInd == -1 && flagGaussInd == -1 && ExtHACloseNow < MAFastNow) PriceBehavior = "MEDIANE - A ETE FRANCHI DU HAUT VERS LE BAS - VALIDER";      
+      if (flagHAInd == -1 && flagGaussInd == -1 && flagFastMAInd == -1 && ExtHACloseNow < MASlowNow) PriceBehavior = "MEDIANE - RETOUR A LA BAISSE";      
    }
    
    
@@ -1590,7 +1581,14 @@ void stratMedianeTrader()
       myFiboCondition = 1*p;
       typeDecisionOrder = 8;
       
-      myPrice = DM_TF_CURR_MIDDLE;
+      //determination du meilleur prix d'achat
+      
+      
+         if (DM_TF_CURR_MIDDLE < BackBoneHigh) {
+            myPrice = BackBoneHigh;
+         }else {
+            myPrice = DM_TF_CURR_MIDDLE;
+         }
       
       //if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    } 
@@ -1601,7 +1599,11 @@ void stratMedianeTrader()
       myFiboCondition = -1*p;
       typeDecisionOrder = 8;
       
-      myPrice = DM_TF_CURR_MIDDLE;
+      if (DM_TF_CURR_MIDDLE > BackBoneLow) {
+         myPrice = BackBoneLow;
+      }else{
+         myPrice = DM_TF_CURR_MIDDLE;
+      }
       
       //if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    }  
@@ -1612,7 +1614,8 @@ void stratMedianeTrader()
 */
 void getTradeDecision()
 {
-     
+
+    
    //if (tradeDecisionCounter == 0) typeDecisionOrder = 0;  
 
    /***************************************************
@@ -1761,7 +1764,7 @@ void CheckForOpen()
                Buy(myLots, myStoploss, SymbObjPoint2,comments, magicNumber1);    
                Buy(myLots, myStoploss, 0,comments, magicNumber1);    
             
-               alertTag=Time[0];
+               
             } 
          }
          if (myFiboCondition == -1)  
@@ -1829,7 +1832,7 @@ void CheckForStopLoss()
                         
                if (OSL == 0 && StLo != 0) 
                {
-                  Print ("Ticket ", OrderTicket(), " ", tip);
+                  //Print ("Ticket ", OrderTicket(), " ", tip);
                   error=OrderModify(OrderTicket(),OrderOpenPrice(),StLo, OrderTakeProfit(),0,White);                      
                }
             }
@@ -1841,7 +1844,7 @@ void CheckForStopLoss()
                
                if (OSL == 0 && StLo != 0) 
                {
-                  Print ("Ticket ", OrderTicket(), " ", tip);
+                  //Print ("Ticket ", OrderTicket(), " ", tip);
                   error=OrderModify(OrderTicket(),OrderOpenPrice(),StLo, OrderTakeProfit(),0,White);       
                }
             }
@@ -1900,15 +1903,14 @@ void TrailingStop(int trailmode)
                //if (OSL >= OOP ) StLo = SlLastBar(1,BID, TrailingStopSlow);                
                if (minlot >= 1) StLo = MathRound(StLo); 
                
-               //Print(Ticket, "PIP_OOP_BID ", PIP_OOP_BID, " StLo ", StLo , " trailmode ", trailmode );
+               //Print(Ticket, "PIP_OOP_BID ", PIP_OOP_BID, " StLo ", StLo , " trailmode ", trailmode, " OSL ",OSL );
                
-               if ((StLo < NoLoss) || NoLoss==0) continue;
-               if (StLo==0) continue; 
-               if (StLo==OSL) continue;
-               if (OSL >= OOP) continue;
-               if ((StLo < OSL+StepTrall*POINT)|| OSL==0 )
+               if (StLo==0) continue;  
+               if (StLo==OSL ) continue; 
+               
+               if ((StLo > OSL+StepTrall*POINT)|| OSL==0 )
                {  error=OrderModify(Ticket,OOP,NormalizeDouble(StLo,DIGITS), OTP,0,White);
-                  //Comment(TekSymbol,"  TrailingStop ",Ticket," ",TimeToStr(TimeCurrent(),TIME_MINUTES));
+                  //Print(TekSymbol,"  TrailingStop ",Ticket," ",TimeToStr(TimeCurrent(),TIME_MINUTES),"   SL ",StLo, " OSL ", OSL, " OTP ", OTP, " SEUIL ", OSL+StepTrall*POINT," MODE ", trailmode);
                   if (!error) Print(TekSymbol,"  Error order ",Ticket," TrailingStop ",
                               GetLastError(),"   ",SymbolTral,"   SL ",StLo, " OSL ", OSL, " OTP ", OTP, " SEUIL ", OSL+StepTrall*POINT," MODE ", trailmode);
                }
@@ -1926,12 +1928,11 @@ void TrailingStop(int trailmode)
                if (minlot >= 1) StLo = MathRound(StLo);                
                
                //Print(Ticket, "PIP_OOP_ASK ", PIP_OOP_ASK , " StLo ", StLo ," OSL ", OSL , " trailmode ", trailmode );
-               
-               if (StLo > NoLoss || NoLoss==0 ) continue;
+
                if (StLo==0) continue;  
                if (StLo==OSL ) continue; 
-               if (OSL <= OOP) continue;
-               if ((StLo > OSL-StepTrall*POINT) || OSL==0 )
+
+               if ((StLo < OSL-StepTrall*POINT) || OSL==0 )
                {                 
                   error=OrderModify(Ticket,OOP,NormalizeDouble(StLo,DIGITS), OTP,0,White);                  
                   //Print(TekSymbol,"  TrailingStop "+Ticket," ",TimeToStr(TimeCurrent(),TIME_MINUTES));                  
@@ -1996,16 +1997,18 @@ double SlLastBar(int tip,double price, int pTrailingStop)
       //------------------------------------------------------- by MVA
       if (pTrailingStop==1)
       {
-         trailingName = "By MovingAverage";
-         int PEMA = iMA(TekSymbol,0, Period() ,0,MODE_EMA,PRICE_CLOSE,1);
+         
+         int PEMA = iMA(TekSymbol,0, MASlowPeriod , 0, MODE_SMA, PRICE_CLOSE,1);
+         trailingName = "By MovingAverage "+MASlowPeriod+" "+PEMA ;
+         
          if (tip== 1)
          {
-            if(price-STOPLEVEL*POINT > PEMA) fr = PEMA - delta*POINT;
+            if(price-STOPLEVEL*POINT > PEMA) fr = PEMA-delta *POINT;
             else fr=0;
          }
          if (tip==-1)
          {
-            if(price+STOPLEVEL*POINT < PEMA) fr = PEMA + delta*POINT;
+            if(price+STOPLEVEL*POINT < PEMA) fr = PEMA+delta *POINT;
             else fr=0;
          }
       }
@@ -2205,7 +2208,7 @@ void Buy(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, int
    //if (myMaxStoploss < pipStopLoss) pipStopLoss = myMaxStoploss;
    
    if (myMaxStoploss + delta < pipStopLoss) {
-      Print ("Buy aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " , myMaxStoploss + delta, " Price ", Ask , " StopPrice ", ASK-pipStopLoss);
+      //Print ("Buy aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " , myMaxStoploss + delta, " Price ", Ask , " StopPrice ", ASK-pipStopLoss);
       return (false);
    }
    
@@ -2217,7 +2220,7 @@ void Buy(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, int
       if (pipTakeProfit != 0) TakeProfitPrice = ASK+pipTakeProfit; 
          
       //debug
-      Print ("Buy ", Ask, " Lots ", nbLot, " pipStopLoss ", pipStopLoss, " pipTakeProfit ", pipTakeProfit," StopLossPrice ", StopLossPrice, " TakeProfitPrice ", TakeProfitPrice);                   
+      //Print ("Buy ", Ask, " Lots ", nbLot, " pipStopLoss ", pipStopLoss, " pipTakeProfit ", pipTakeProfit," StopLossPrice ", StopLossPrice, " TakeProfitPrice ", TakeProfitPrice);                   
       
       if (enableTrading){
          Tradecount++;
@@ -2241,12 +2244,12 @@ void Buy(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, int
                PlaySound("alert.wav");  
                alertSoundTag=Time[0];     
             }
-            //alertTag=Time[0];     
+            alertTag=Time[0];     
             
          }else
          {
             //OrderClose(ticket,nbLot,BID,Slippage,CLR_NONE);
-            Print("Error opening BUY order : ",GetLastError(), " pipTakeProfit=", pipTakeProfit , " TakeProfitPrice=", TakeProfitPrice, "My price=", myPrice , " Ask=",ASK ); 
+            //Print("Error opening BUY order : ",GetLastError(), " pipTakeProfit=", pipTakeProfit , " TakeProfitPrice=", TakeProfitPrice, "My price=", myPrice , " Ask=",ASK ); 
          }
       }else{
          Print("FAKE BUY ", ASK, " SL ",StopLossPrice, " TP ",  TakeProfitPrice);
@@ -2281,7 +2284,7 @@ void Sell(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, in
    //if (myMaxStoploss < pipStopLoss) pipStopLoss = myMaxStoploss;
    
    if (myMaxStoploss + delta  < pipStopLoss) {
-      Print ("Sell aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " ,myMaxStoploss + delta, " Price  ", Bid, " StopPrice ", BID+pipStopLoss);
+      //Print ("Sell aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " ,myMaxStoploss + delta, " Price  ", Bid, " StopPrice ", BID+pipStopLoss);
       return(false);
    }
    
@@ -2295,7 +2298,7 @@ void Sell(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, in
       if (pipTakeProfit != 0 ) TakeProfitPrice = BID-pipTakeProfit;
       
       //debug
-      Print ("Sell ", Bid, " Lots ", nbLot, " pipStopLoss ", pipStopLoss, " pipTakeProfit ", pipTakeProfit," StopLossPrice ", StopLossPrice, " TakeProfitPrice ", TakeProfitPrice);                   
+      //Print ("Sell ", Bid, " Lots ", nbLot, " pipStopLoss ", pipStopLoss, " pipTakeProfit ", pipTakeProfit," StopLossPrice ", StopLossPrice, " TakeProfitPrice ", TakeProfitPrice);                   
       
       if (enableTrading){
          Tradecount++;
@@ -2312,7 +2315,7 @@ void Sell(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, in
             closeOrder(Symbol(), "CU", OP_BUY);
             
             currentNbSells++;            
-            //alertTag=Time[0];  
+            alertTag=Time[0];  
             
             if (alertSoundTag != Time[0]) 
             {
@@ -2323,7 +2326,7 @@ void Sell(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, in
          }else
          {
             //OrderClose(ticket,nbLot,ASK,Slippage,CLR_NONE);
-            Print("Error opening Sell order : ",GetLastError(), " pipTakeProfit ", pipTakeProfit , " TakeProfitPrice=" , TakeProfitPrice, " My price=", myPrice , " Bid=",BID ); 
+            //Print("Error opening Sell order : ",GetLastError(), " pipTakeProfit ", pipTakeProfit , " TakeProfitPrice=" , TakeProfitPrice, " My price=", myPrice , " Bid=",BID ); 
          } 
       }else{
          Print("FAKE SELL ", BID, " SL ",StopLossPrice, " TP ",  TakeProfitPrice);
@@ -2477,15 +2480,16 @@ void CheckForClosebyObjectives()
             {
                if ((BID >= tradeBuyObjectives3 && tradeBuyObjectives3 != 0 ) || TradeObjStatus == "BUY_OBJ3_OK" ) {                   
                   TradeObjStatus = "BUY_OBJ3_OK";
-                  CheckForClosebyPnl(30);                  
-                  //TrailingStop(TrailingStopSlow);
+                  //CheckForClosebyPnl(30);                  
+                  TrailingStop(1);
                } else if ((BID >= tradeBuyObjectives2 && tradeBuyObjectives2 != 0) || TradeObjStatus == "BUY_OBJ2_OK" ) {
                   TradeObjStatus = "BUY_OBJ2_OK";
-                  CheckForClosebyPnl(40);
+                  //CheckForClosebyPnl(40);
+                  TrailingStop(TrailingStopSlow);
                } else if (BID >= tradeBuyObjectives1 && tradeBuyObjectives1 != 0) {
                   TradeObjStatus = "BUY_OBJ1_OK";
                   securePosition();
-                  TrailingStop(TrailingStopFast);
+                  //TrailingStop(TrailingStopFast);
                }else
                {
                   TrailingStop(TrailingStopSlow);
@@ -2494,15 +2498,16 @@ void CheckForClosebyObjectives()
             {
                if ((ASK <= tradeSellObjectives3 && tradeSellObjectives3 != 0) || TradeObjStatus == "SELL_OBJ3_OK" ) {
                   TradeObjStatus = "SELL_OBJ3_OK";
-                  CheckForClosebyPnl(30);
-                  //TrailingStop(TrailingStopSlow);
+                  //CheckForClosebyPnl(30);
+                  TrailingStop(1);
                } else if ((ASK <= tradeSellObjectives2 && tradeSellObjectives2 != 0) || TradeObjStatus == "SELL_OBJ2_OK" ){
-                  TradeObjStatus = "SELL_OBJ2_OK";
-                  CheckForClosebyPnl(40);
+                  //TradeObjStatus = "SELL_OBJ2_OK";
+                  //CheckForClosebyPnl(40);
+                  TrailingStop(TrailingStopSlow);
                } else if (ASK <= tradeSellObjectives1 && tradeSellObjectives1 != 0) {
                   TradeObjStatus = "SELL_OBJ1_OK";
                   securePosition();
-                  TrailingStop(TrailingStopFast);
+                  //TrailingStop(TrailingStopFast);
                }  else
                {
                   TrailingStop(TrailingStopSlow);
