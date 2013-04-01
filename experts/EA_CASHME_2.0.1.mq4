@@ -246,7 +246,7 @@ double  K_Velocity           = 1.0;    //magnification stoploss of Velocity
 int      STOPLEVEL,n,DIGITS,SPREAD;
 double   BID,ASK,POINT,MARGININIT, OTP, StLo;
 string   SymbolTral,TekSymbol;
-int      Slippage      = 2;
+int      Slippage      = 1;
 //--------------------------------------------------------------------
 
 
@@ -289,7 +289,7 @@ if (Symbol() == "FRA40")
          
          myStoploss=3;
          myTakeProfit=0;
-         myMaxStoploss=5;        
+         myMaxStoploss=10;        
 
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 6;                           // 0 off 
@@ -299,9 +299,9 @@ if (Symbol() == "FRA40")
          
          magicNumber1 = 101;
          
-         SymbObjPoint1= 8;
+         SymbObjPoint1= 5;
          SymbObjPoint2= 12; 
-         SymbObjPoint3= 15;
+         SymbObjPoint3= 26;
          
          DM_THRESHOLD = 15;
          
@@ -1244,15 +1244,15 @@ void stratDMSupportResistance()
    if (PriceBehavior == "DYN SUPP/REST - SUPPORT TOUCHE" || PriceBehavior == "DYN SUPP/REST - REBOND SUR SUPPORT")
    {
       //if (ExtHACloseNow < DM_TF_CURR_SUPPORT)  PriceBehavior = "DYN SUPP/REST - CASSAGE SUPPORT";  
-      if (ExtHACloseNow < DM_TF_CURR_SUPPORT || ExtHACloseNow > MASlowNow)  PriceBehavior = "";  
-      if (flagHAInd == 1 && ExtHACloseNow > MAFastNow && flagFastMAInd == 1 && ExtHACloseNow > DM_TF_CURR_SUPPORT) PriceBehavior = "DYN SUPP/REST - REBOND SUR SUPPORT";      
+      if (ExtHACloseNow < DM_TF_CURR_SUPPORT || ExtHACloseNow > MASlowNow || flagGaussInd == -1 || ExtHACloseNow < MAFastNow )  PriceBehavior = "";  
+      if (flagHAInd == 1 && ExtHACloseNow > MAFastNow && flagGaussInd == 1 && ExtHACloseNow > DM_TF_CURR_SUPPORT) PriceBehavior = "DYN SUPP/REST - REBOND SUR SUPPORT";      
    }
    
    if (PriceBehavior == "DYN SUPP/REST - RESISTANCE TOUCHE" || PriceBehavior == "DYN SUPP/REST - RETOUR A LA BAISSE")
    {
       //if (ExtHACloseNow > DM_TF_CURR_RESISTANCE)  PriceBehavior = "DYN SUPP/REST - FRANCHISSEMENT RESISTANCE";            
-      if (ExtHACloseNow > DM_TF_CURR_RESISTANCE || ExtHACloseNow < MASlowNow )  PriceBehavior = "";            
-      if (flagHAInd == -1 && ExtHACloseNow < MAFastNow && flagFastMAInd == -1 && ExtHACloseNow < DM_TF_CURR_RESISTANCE) PriceBehavior = "DYN SUPP/REST - RETOUR A LA BAISSE";      
+      if (ExtHACloseNow > DM_TF_CURR_RESISTANCE || ExtHACloseNow < MASlowNow  || flagGaussInd == 1 || ExtHACloseNow > MAFastNow )  PriceBehavior = "";            
+      if (flagHAInd == -1 && ExtHACloseNow < MAFastNow && flagGaussInd == -1 && ExtHACloseNow < DM_TF_CURR_RESISTANCE) PriceBehavior = "DYN SUPP/REST - RETOUR A LA BAISSE";      
    }
 
    // invalidation
@@ -1546,19 +1546,19 @@ void stratMedianeTrader()
    
    // STEP 2  
    
-   if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE HAUT")
+   if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE HAUT" || PriceBehavior == "MEDIANE - REBOND SUR SUPPORT")
    {
-      if (ExtHACloseNow < DM_TF_CURR_MIDDLE || flagGaussInd == -1)  PriceBehavior = "";
-      if (flagHAInd == 1 && (flagGaussInd == 1 || flagGaussInd == 1 && flagFastMAInd == 1)
+      if (ExtHACloseNow < DM_TF_CURR_MIDDLE || flagGaussInd == -1 || flagFastMAInd == -1)  PriceBehavior = "";
+      if (flagHAInd == 1 && flagGaussInd == 1 && flagFastMAInd == 1
           &&  ExtHAOpenNow > DM_TF_CURR_MIDDLE)
          PriceBehavior = "MEDIANE - REBOND SUR SUPPORT";               
          
    }
    
-   if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE BAS")
+   if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE BAS" || PriceBehavior == "MEDIANE - RETOUR A LA BAISSE")
    {
-      if (ExtHACloseNow > DM_TF_CURR_MIDDLE || flagGaussInd == 1)  PriceBehavior = "";
-      if (flagHAInd == -1 && (flagGaussInd == -1 || flagGaussInd == -1 && flagFastMAInd == -1)
+      if (ExtHACloseNow > DM_TF_CURR_MIDDLE || flagGaussInd == 1 || flagFastMAInd == 1)  PriceBehavior = "";
+      if (flagHAInd == -1 && flagGaussInd == -1 && flagFastMAInd == -1
            && ExtHAOpenNow < DM_TF_CURR_MIDDLE) 
          PriceBehavior = "MEDIANE - RETOUR A LA BAISSE";      
    }
@@ -1566,8 +1566,6 @@ void stratMedianeTrader()
    
    /// STEP3
    
-   if (PriceBehavior == "MEDIANE - REBOND SUR SUPPORT" && (ExtHACloseNow < DM_TF_CURR_MIDDLE || MathAbs(ExtHACloseNow - DM_TF_CURR_MIDDLE) > 5 )) PriceBehavior ="";
-   if (PriceBehavior == "MEDIANE - RETOUR A LA BAISSE" && (ExtHACloseNow > DM_TF_CURR_MIDDLE || MathAbs(ExtHACloseNow - DM_TF_CURR_MIDDLE) > 5 )) PriceBehavior ="";
    
    if (PriceBehavior == "MEDIANE - REBOND SUR SUPPORT" 
       //   || PriceBehavior == "MEDIANE - A ETE FRANCHI DU HAUT VERS LE BAS - VALIDER"
@@ -1576,10 +1574,10 @@ void stratMedianeTrader()
       typeDecisionOrder = 8;
       
       //determination du prix par défaut
-      myPrice = DM_TF_CURR_MIDDLE;
+      myPrice = DM_TF_CURR_MIDDLE + BreakOutDelta + Slippage;
       
       //Ajustement pt d'entrée
-      if( BackBoneHigh - DM_TF_CURR_MIDDLE > 0 && BackBoneHigh - DM_TF_CURR_MIDDLE <= Slippage) myPrice = MASlowNow;
+      //if( BackBoneHigh - DM_TF_CURR_MIDDLE > 0 && BackBoneHigh - DM_TF_CURR_MIDDLE <= Slippage) myPrice = MASlowNow;
       
       //if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    } 
@@ -1591,10 +1589,10 @@ void stratMedianeTrader()
       typeDecisionOrder = 8;
       
       //determination du prix par défaut
-      myPrice = DM_TF_CURR_MIDDLE;
+      myPrice = DM_TF_CURR_MIDDLE - BreakOutDelta - Slippage;
       
       //Ajustement pt d'entrée
-      if( DM_TF_CURR_MIDDLE - BackBoneLow > 0 && DM_TF_CURR_MIDDLE - BackBoneLow <= Slippage) myPrice = MASlowNow;
+      //if( DM_TF_CURR_MIDDLE - BackBoneLow > 0 && DM_TF_CURR_MIDDLE - BackBoneLow <= Slippage) myPrice = MASlowNow;
       
       //if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    }  
@@ -1619,7 +1617,7 @@ void getTradeDecision()
       SCENARIO 2: DYNAMIQUE ACHAT SUR SUPPORT / VENTE SUR ECHEC RESISTANCE
       TYPE DECISION = 2
    ************************************************** */   
-   //stratDMSupportResistance();
+   stratDMSupportResistance();
    
    /***************************************************
       SCENARIO 3: PIVOT ACHAT SUR SUPPORT / VENTE SUR ECHEC RESISTANCE
@@ -1655,7 +1653,7 @@ void getTradeDecision()
       SCENARIO : MEDIANE TRADER
       TYPE DECISION = 8
    ************************************************** */   
-   stratMedianeTrader();
+   //stratMedianeTrader();
       
    /*  GOLDEN/DEATH CROSS */
    
@@ -2195,7 +2193,7 @@ void Buy(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, int
    //if (myMaxStoploss < pipStopLoss) pipStopLoss = myMaxStoploss;
    
    if (myMaxStoploss + delta < pipStopLoss) {
-      //Print ("Buy aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " , myMaxStoploss + delta, " Price ", Ask , " StopPrice ", ASK-pipStopLoss);
+      Print ("Buy aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " , myMaxStoploss + delta, " Price ", Ask , " StopPrice ", ASK-pipStopLoss);
       return (false);
    }
    
@@ -2272,7 +2270,7 @@ void Sell(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, in
    //if (myMaxStoploss < pipStopLoss) pipStopLoss = myMaxStoploss;
    
    if (myMaxStoploss + delta  < pipStopLoss) {
-      //Print ("Sell aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " ,myMaxStoploss + delta, " Price  ", Bid, " StopPrice ", BID+pipStopLoss);
+      Print ("Sell aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " ,myMaxStoploss + delta, " Price  ", Bid, " StopPrice ", BID+pipStopLoss);
       return(false);
    }
    
