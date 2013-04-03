@@ -652,11 +652,13 @@ int start()
    tradeDecisionOK= false;
    
    if (Bars<100 || IsTradeAllowed()==false) return;   
-   if (Time[0]-tradeDecisionTag >= Period() * 60 * 5) {
+   if (Time[0]-tradeDecisionTag >= Period() * 60 * 10) {
       tradeDecisionOK= True;
       tradeDecisionCounter=0;
       tradeDecisionTag=NULL;
       PriceBehavior = "";
+      myPrice=0;
+      typeDecisionOrder=0;
    }
    
    if (tradeDecisionCounter > 0) tradeDecisionCounter--;
@@ -1550,9 +1552,7 @@ void stratMedianeTrader()
    if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE HAUT" || PriceBehavior == "MEDIANE - REBOND SUR SUPPORT")
    {
       if (ExtHACloseNow < DM_TF_CURR_MIDDLE || flagGaussInd == -1 || flagFastMAInd == -1)  PriceBehavior = "";
-      if (flagHAInd == 1 && flagGaussInd == 1 && flagFastMAInd == 1
-          &&  ExtHAOpenNow > DM_TF_CURR_MIDDLE)
-         PriceBehavior = "MEDIANE - REBOND SUR SUPPORT";               
+      if (flagHAInd == 1 && flagGaussInd == 1 && flagFastMAInd == 1 &&  ExtHAOpenNow > DM_TF_CURR_MIDDLE) PriceBehavior = "MEDIANE - REBOND SUR SUPPORT";               
          
    }
    
@@ -1746,6 +1746,11 @@ void CheckForOpen()
             if (myTakeProfit != 0) comments = putParlist(comments, "TP", myTakeProfit); 
             comments = putParlist(comments, "TF", Period()); 
             
+            
+            ObjectCreate("ORDERSEND-"+Tradecount,OBJ_ARROW,0,Time[0]+Period()*60,myPrice,0,0,0,0);                     
+            ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_ARROWCODE,241);
+            ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_COLOR, DarkGreen);         
+         
             if (alertTag!=Time[0]) 
             {
                Buy(myLots, myStoploss, SymbObjPoint1,comments, magicNumber1);    
@@ -1770,6 +1775,10 @@ void CheckForOpen()
             comments = putParlist(comments, "TF", Period()); 
             
             
+            ObjectCreate("ORDERSEND-"+Tradecount,OBJ_ARROW,0,Time[0]+Period()*60,myPrice,0,0,0,0);                     
+            ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_ARROWCODE,242);
+            ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_COLOR, FireBrick);            
+         
             if (alertTag!=Time[0] )
             {      
                Sell(myLots, myStoploss, SymbObjPoint1,comments, magicNumber1);     
@@ -2209,16 +2218,10 @@ void Buy(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, int
       if (enableTrading){
          Tradecount++;
          
-         ObjectCreate("ORDERSEND-"+Tradecount,OBJ_ARROW,0,Time[0]+Period()*60,myPrice,0,0,0,0);                     
-         ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_ARROWCODE,241);
-         ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_COLOR, DarkGreen);
-         
          ticket = OrderSend(Symbol(), OP_BUY, nbLot, myPrice, Slippage, 0, TakeProfitPrice, eaComment, myMagic,0,Green);
          
          if (ticket > 0 ) {
-            PriceBehavior= "";
-            tradeDecisionTag = 0;
-         
+            
             closeOrder(Symbol(), "CN", OP_SELL);
             
             //OrderModify(ticket, OrderOpenPrice(), StopLossPrice, TakeProfitPrice, 0);   
@@ -2285,17 +2288,11 @@ void Sell(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, in
       
       if (enableTrading){
          Tradecount++;
-         ObjectCreate("ORDERSEND-"+Tradecount,OBJ_ARROW,0,Time[0]+Period()*60,myPrice,0,0,0,0);                     
-         ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_ARROWCODE,242);
-         ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_COLOR, FireBrick);
          
          ticket = OrderSend(Symbol(),OP_SELL, nbLot,myPrice,Slippage,0, TakeProfitPrice,eaComment, myMagic,0,Red);      
         
          
          if (ticket > 0 ) {
-         
-            PriceBehavior= "";
-            tradeDecisionTag = 0;
          
             //OrderModify(ticket, OrderOpenPrice(), StopLossPrice, TakeProfitPrice, 0);   
             closeOrder(Symbol(), "CU", OP_BUY);
