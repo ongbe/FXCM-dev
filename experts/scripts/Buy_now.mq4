@@ -18,8 +18,28 @@ double TSigUp, TSigDown;
 //+------------------------------------------------------------------+
 int start()
   {
+  
+  //getLotSize()
+  
+  int magicNumber1;
 
-ticket= OrderSend(Symbol(),OP_BUY,getLotSize(),Ask,3, 0,0);
+if (Symbol() == "FRA40")
+{     
+   if (Period() == PERIOD_M1){
+      magicNumber1 = 101;
+   }else if (Period() == PERIOD_M5){
+      magicNumber1 = 105;
+   }
+} else    if (Symbol() == "GER30")   
+{
+   if (Period() == PERIOD_M1){
+      magicNumber1 = 201;
+   }else if (Period() == PERIOD_M5){
+      magicNumber1 = 205;
+   }
+}               
+         
+ticket= OrderSend(Symbol(),OP_BUY,1,Ask,3, 0,0, "Manuel Buy" ,magicNumber1,0,DarkGreen);
 
  Print("Closing script ",ticket);
  

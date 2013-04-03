@@ -15,7 +15,7 @@
 extern string Custom_Indicator = "Dynamic Support/Resistance";
 extern string Copyright = "© 2007, CompassFX, LLC.";
 extern string Web_Address = "www.compassfx.com";
-
+extern int period = 500;
 
 double g_ibuf_100[];
 double g_ibuf_104[];
@@ -52,14 +52,14 @@ int start() {
       g_ibuf_104[li_4] = High[li_4];
       g_ibuf_100[li_4] = Low[li_4];
    }
-   for (int li_8 = 0; li_8 < li_4; li_8++) g_ibuf_112[li_8] = (High[iHighest(NULL, 0, MODE_HIGH, 3, li_8)] + Low[iLowest(NULL, 0, MODE_LOW, 3, li_8)] + Close[li_8]) / 5.0;
+   for (int li_8 = 0; li_8 < li_4; li_8++) g_ibuf_112[li_8] = (High[iHighest(NULL, 0, MODE_HIGH, period, li_8)] + Low[iLowest(NULL, 0, MODE_LOW, period, li_8)] + Close[li_8]) / 3.0;
    for (li_8 = 0; li_8 < li_4; li_8++) g_ibuf_116[li_8] = iMAOnArray(g_ibuf_112, Bars, 25, 0, MODE_SMA, li_8);
    for (li_8 = li_4 - 1; li_8 >= 0; li_8--) {
-      if (g_ibuf_112[li_8 + 1] > g_ibuf_116[li_8 + 1] && g_ibuf_112[li_8] < g_ibuf_116[li_8]) g_ibuf_104[li_8] = High[iHighest(NULL, 0, MODE_HIGH, 200, li_8)];
+      if (g_ibuf_112[li_8 + 1] > g_ibuf_116[li_8 + 1] && g_ibuf_112[li_8] < g_ibuf_116[li_8]) g_ibuf_104[li_8] = High[iHighest(NULL, 0, MODE_HIGH, period, li_8)];
       else g_ibuf_104[li_8] = g_ibuf_104[li_8 + 1];
    }
    for (li_8 = li_4 - 1; li_8 >= 0; li_8--) {
-      if (g_ibuf_112[li_8 + 1] < g_ibuf_116[li_8 + 1] && g_ibuf_112[li_8] > g_ibuf_116[li_8]) g_ibuf_100[li_8] = Low[iLowest(NULL, 0, MODE_LOW, 200, li_8)];
+      if (g_ibuf_112[li_8 + 1] < g_ibuf_116[li_8 + 1] && g_ibuf_112[li_8] > g_ibuf_116[li_8]) g_ibuf_100[li_8] = Low[iLowest(NULL, 0, MODE_LOW, period, li_8)];
       else g_ibuf_100[li_8] = g_ibuf_100[li_8 + 1];
    }
    for (li_8 = 0; li_8 < li_4; li_8++) g_ibuf_108[li_8] = NormalizeDouble((g_ibuf_104[li_8] + g_ibuf_100[li_8]) / 2.0, Digits);

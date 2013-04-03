@@ -13,20 +13,24 @@ int start()
   {
 //----
 
+
 for (int i=OrdersTotal(); i>=0; i--) 
    {  if (OrderSelect(i, SELECT_BY_POS)==true)
       {  
          if (OrderStopLoss() == 0) {
+         
+         int StepTrall = MarketInfo(OrderSymbol(),MODE_STOPLEVEL);         
+         
              switch(OrderType())
                {
                
-                  case OP_BUY       :OrderModify(OrderTicket(),OrderOpenPrice(), Bid - 5 * Point,0,NULL); break;
-                  case OP_SELL      :OrderModify(OrderTicket(),OrderOpenPrice(), Ask + 5 * Point,0,NULL); break;
+                  case OP_BUY       :OrderModify(OrderTicket(),OrderOpenPrice(), Bid - StepTrall * Point,OrderTakeProfit(),NULL); break;
+                  case OP_SELL      :OrderModify(OrderTicket(),OrderOpenPrice(), Ask + StepTrall * Point,OrderTakeProfit(),NULL); break;
                  
                }
             
          } else {
-            OrderModify(OrderTicket(),OrderOpenPrice(),OrderOpenPrice(),0,NULL);
+            OrderModify(OrderTicket(),OrderOpenPrice(),OrderOpenPrice(),OrderTakeProfit(),NULL);
             
          }
          

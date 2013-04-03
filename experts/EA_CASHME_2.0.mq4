@@ -1,5 +1,5 @@
 #property link      ""
-string ea_version = "CASH ME IF YOU CAN v1.10";
+string ea_version = "CASH ME IF YOU CAN v1.2";
 
 //trade counter
 
@@ -246,7 +246,7 @@ double  K_Velocity           = 1.0;    //magnification stoploss of Velocity
 int      STOPLEVEL,n,DIGITS,SPREAD;
 double   BID,ASK,POINT,MARGININIT, OTP, StLo;
 string   SymbolTral,TekSymbol;
-int      Slippage      = 2;
+int      Slippage      = 1;
 //--------------------------------------------------------------------
 
 
@@ -289,7 +289,7 @@ if (Symbol() == "FRA40")
          
          myStoploss=3;
          myTakeProfit=0;
-         myMaxStoploss=5;        
+         myMaxStoploss=10;        
 
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 6;                           // 0 off 
@@ -299,9 +299,9 @@ if (Symbol() == "FRA40")
          
          magicNumber1 = 101;
          
-         SymbObjPoint1= 8;
+         SymbObjPoint1= 5;
          SymbObjPoint2= 12; 
-         SymbObjPoint3= 15;
+         SymbObjPoint3= 26;
          
          DM_THRESHOLD = 15;
          
@@ -314,13 +314,13 @@ if (Symbol() == "FRA40")
            
          myStoploss=7;
          myTakeProfit=0;
-         myMaxStoploss=4;       
+         myMaxStoploss=10;       
          
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 8;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
-         delta                = 4;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 4;
+         delta                = 10;                          // offset from the fractal or candles or Parabolic 
+         BreakOutDelta        = 6;
          
          SymbObjPoint1= 8;
          SymbObjPoint2= 13; 
@@ -379,17 +379,17 @@ if (Symbol() == "FRA40")
          
          myStoploss=7;
          myTakeProfit=0;
-         myMaxStoploss=4;        
+         myMaxStoploss=15;        
 
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 8;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
-         delta                = 4;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 3;
+         delta                = 8;                          // offset from the fractal or candles or Parabolic 
+         BreakOutDelta        = 5;
          
-         SymbObjPoint1= 8;
-         SymbObjPoint2= 13; 
-         SymbObjPoint3= 25;
+         SymbObjPoint1= 12;
+         SymbObjPoint2= 19; 
+         SymbObjPoint3= 35;
          
          
          magicNumber1 = 201;
@@ -403,17 +403,17 @@ if (Symbol() == "FRA40")
            
          myStoploss=8;
          myTakeProfit=0;
-         myMaxStoploss=4;       
+         myMaxStoploss=15;       
          
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 12;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
-         delta                = 5;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 5;
+         delta                = 12;                          // offset from the fractal or candles or Parabolic 
+         BreakOutDelta        = 10;
          
-         SymbObjPoint1= 13;
-         SymbObjPoint2= 21; 
-         SymbObjPoint3= 34;
+         SymbObjPoint1= 16;
+         SymbObjPoint2= 23; 
+         SymbObjPoint3= 50;
         
          magicNumber1 = 205;
          
@@ -649,13 +649,14 @@ void setEaTradeMode()
 int start()
   {
    //---- check for history and trading
-   tradeDecisionOK= False;
+   tradeDecisionOK= false;
    
    if (Bars<100 || IsTradeAllowed()==false) return;   
    if (Time[0]-tradeDecisionTag >= Period() * 60 * 5) {
       tradeDecisionOK= True;
       tradeDecisionCounter=0;
       tradeDecisionTag=NULL;
+      PriceBehavior = "";
    }
    
    if (tradeDecisionCounter > 0) tradeDecisionCounter--;
@@ -905,12 +906,12 @@ void getTraderDetail(int pTimeFrame)
    if (Period() == PERIOD_M5) TFSUP = PERIOD_M15;
    if (Period() == PERIOD_M15) TFSUP = PERIOD_M30;
    
-   DM_TF_CURR_RESISTANCE = iCustom(Symbol(),NULL, "DM_DSR", 0, 1);
-   DM_TF_CURR_SUPPORT = iCustom(Symbol(),NULL, "DM_DSR", 1, 1);
-   DM_TF_CURR_MIDDLE = iCustom(Symbol(),NULL, "DM_DSR", 2, 1);
-   DM_TF_SUPP_RESISTANCE = iCustom(Symbol(),TFSUP, "DM_DSR", 0, 1);
-   DM_TF_SUPP_SUPPORT = iCustom(Symbol(),TFSUP, "DM_DSR", 1, 1);
-   DM_TF_SUPP_MIDDLE = iCustom(Symbol(),TFSUP, "DM_DSR", 2, 1);
+   DM_TF_CURR_RESISTANCE = iCustom(Symbol(),NULL, "DM_DSR", 500, 0, 1);
+   DM_TF_CURR_SUPPORT = iCustom(Symbol(),NULL, "DM_DSR", 500, 1, 1);
+   DM_TF_CURR_MIDDLE = iCustom(Symbol(),NULL, "DM_DSR", 500, 2, 1);
+   DM_TF_SUPP_RESISTANCE = iCustom(Symbol(),TFSUP, "DM_DSR", 500, 0, 1);
+   DM_TF_SUPP_SUPPORT = iCustom(Symbol(),TFSUP, "DM_DSR", 500, 1, 1);
+   DM_TF_SUPP_MIDDLE = iCustom(Symbol(),TFSUP, "DM_DSR", 500, 2, 1);
 
 }
 
@@ -1244,15 +1245,15 @@ void stratDMSupportResistance()
    if (PriceBehavior == "DYN SUPP/REST - SUPPORT TOUCHE" || PriceBehavior == "DYN SUPP/REST - REBOND SUR SUPPORT")
    {
       //if (ExtHACloseNow < DM_TF_CURR_SUPPORT)  PriceBehavior = "DYN SUPP/REST - CASSAGE SUPPORT";  
-      if (ExtHACloseNow < DM_TF_CURR_SUPPORT || ExtHACloseNow > MASlowNow)  PriceBehavior = "";  
-      if (flagHAInd == 1 && ExtHACloseNow > MAFastNow && flagFastMAInd == 1 && ExtHACloseNow > DM_TF_CURR_SUPPORT) PriceBehavior = "DYN SUPP/REST - REBOND SUR SUPPORT";      
+      if (ExtHACloseNow < DM_TF_CURR_SUPPORT || ExtHACloseNow > MASlowNow || flagGaussInd == -1 || ExtHACloseNow < MAFastNow )  PriceBehavior = "";  
+      if (flagHAInd == 1 && ExtHACloseNow > MAFastNow && flagGaussInd == 1 && ExtHACloseNow > DM_TF_CURR_SUPPORT) PriceBehavior = "DYN SUPP/REST - REBOND SUR SUPPORT";      
    }
    
    if (PriceBehavior == "DYN SUPP/REST - RESISTANCE TOUCHE" || PriceBehavior == "DYN SUPP/REST - RETOUR A LA BAISSE")
    {
       //if (ExtHACloseNow > DM_TF_CURR_RESISTANCE)  PriceBehavior = "DYN SUPP/REST - FRANCHISSEMENT RESISTANCE";            
-      if (ExtHACloseNow > DM_TF_CURR_RESISTANCE || ExtHACloseNow < MASlowNow )  PriceBehavior = "";            
-      if (flagHAInd == -1 && ExtHACloseNow < MAFastNow && flagFastMAInd == -1 && ExtHACloseNow < DM_TF_CURR_RESISTANCE) PriceBehavior = "DYN SUPP/REST - RETOUR A LA BAISSE";      
+      if (ExtHACloseNow > DM_TF_CURR_RESISTANCE || ExtHACloseNow < MASlowNow  || flagGaussInd == 1 || ExtHACloseNow > MAFastNow )  PriceBehavior = "";            
+      if (flagHAInd == -1 && ExtHACloseNow < MAFastNow && flagGaussInd == -1 && ExtHACloseNow < DM_TF_CURR_RESISTANCE) PriceBehavior = "DYN SUPP/REST - RETOUR A LA BAISSE";      
    }
 
    // invalidation
@@ -1546,19 +1547,19 @@ void stratMedianeTrader()
    
    // STEP 2  
    
-   if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE HAUT")
+   if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE HAUT" || PriceBehavior == "MEDIANE - REBOND SUR SUPPORT")
    {
-      if (ExtHACloseNow < DM_TF_CURR_MIDDLE || flagGaussInd == -1)  PriceBehavior = "";
-      if (flagHAInd == 1 && (flagGaussInd == 1 || flagGaussInd == 1 && flagFastMAInd == 1)
+      if (ExtHACloseNow < DM_TF_CURR_MIDDLE || flagGaussInd == -1 || flagFastMAInd == -1)  PriceBehavior = "";
+      if (flagHAInd == 1 && flagGaussInd == 1 && flagFastMAInd == 1
           &&  ExtHAOpenNow > DM_TF_CURR_MIDDLE)
          PriceBehavior = "MEDIANE - REBOND SUR SUPPORT";               
          
    }
    
-   if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE BAS")
+   if (PriceBehavior == "MEDIANE - A ETE TOUCHE - PAR LE BAS" || PriceBehavior == "MEDIANE - RETOUR A LA BAISSE")
    {
-      if (ExtHACloseNow > DM_TF_CURR_MIDDLE || flagGaussInd == 1)  PriceBehavior = "";
-      if (flagHAInd == -1 && (flagGaussInd == -1 || flagGaussInd == -1 && flagFastMAInd == -1)
+      if (ExtHACloseNow > DM_TF_CURR_MIDDLE || flagGaussInd == 1 || flagFastMAInd == 1)  PriceBehavior = "";
+      if (flagHAInd == -1 && flagGaussInd == -1 && flagFastMAInd == -1
            && ExtHAOpenNow < DM_TF_CURR_MIDDLE) 
          PriceBehavior = "MEDIANE - RETOUR A LA BAISSE";      
    }
@@ -1566,8 +1567,6 @@ void stratMedianeTrader()
    
    /// STEP3
    
-   if (PriceBehavior == "MEDIANE - REBOND SUR SUPPORT" && (ExtHACloseNow < DM_TF_CURR_MIDDLE || MathAbs(ExtHACloseNow - DM_TF_CURR_MIDDLE) > 5 )) PriceBehavior ="";
-   if (PriceBehavior == "MEDIANE - RETOUR A LA BAISSE" && (ExtHACloseNow > DM_TF_CURR_MIDDLE || MathAbs(ExtHACloseNow - DM_TF_CURR_MIDDLE) > 5 )) PriceBehavior ="";
    
    if (PriceBehavior == "MEDIANE - REBOND SUR SUPPORT" 
       //   || PriceBehavior == "MEDIANE - A ETE FRANCHI DU HAUT VERS LE BAS - VALIDER"
@@ -1576,12 +1575,12 @@ void stratMedianeTrader()
       typeDecisionOrder = 8;
       
       //determination du prix par défaut
-      myPrice = DM_TF_CURR_MIDDLE;
+      myPrice = DM_TF_CURR_MIDDLE + BreakOutDelta + Slippage;
       
       //Ajustement pt d'entrée
-      if( BackBoneHigh - DM_TF_CURR_MIDDLE > 0 && BackBoneHigh - DM_TF_CURR_MIDDLE <= Slippage) myPrice = MASlowNow;
+      //if( BackBoneHigh - DM_TF_CURR_MIDDLE > 0 && BackBoneHigh - DM_TF_CURR_MIDDLE <= Slippage) myPrice = MASlowNow;
       
-      //if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
+      if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    } 
    
    if (PriceBehavior == "MEDIANE - RETOUR A LA BAISSE" 
@@ -1591,12 +1590,12 @@ void stratMedianeTrader()
       typeDecisionOrder = 8;
       
       //determination du prix par défaut
-      myPrice = DM_TF_CURR_MIDDLE;
+      myPrice = DM_TF_CURR_MIDDLE - BreakOutDelta - Slippage;
       
       //Ajustement pt d'entrée
-      if( DM_TF_CURR_MIDDLE - BackBoneLow > 0 && DM_TF_CURR_MIDDLE - BackBoneLow <= Slippage) myPrice = MASlowNow;
+      //if( DM_TF_CURR_MIDDLE - BackBoneLow > 0 && DM_TF_CURR_MIDDLE - BackBoneLow <= Slippage) myPrice = MASlowNow;
       
-      //if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
+      if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    }  
 }
  
@@ -1613,13 +1612,13 @@ void getTradeDecision()
       SCENARIO : HARAMI
       TYPE DECISION = 6
    ************************************************** */   
-   //stratChandelierHarami();
+   stratChandelierHarami();
       
    /***************************************************
       SCENARIO 2: DYNAMIQUE ACHAT SUR SUPPORT / VENTE SUR ECHEC RESISTANCE
       TYPE DECISION = 2
    ************************************************** */   
-   //stratDMSupportResistance();
+   stratDMSupportResistance();
    
    /***************************************************
       SCENARIO 3: PIVOT ACHAT SUR SUPPORT / VENTE SUR ECHEC RESISTANCE
@@ -1632,7 +1631,7 @@ void getTradeDecision()
       SCENARIO : BREAKOUT
       TYPE DECISION = 4
    ************************************************** */
-   //stratSupportResistanceBreakOut();
+   stratSupportResistanceBreakOut();
    
    //stratMovingAverageFractBreakOut();
    
@@ -2194,13 +2193,11 @@ void Buy(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, int
    //if (pipStopLoss < STOPLEVEL) pipStopLoss = MarketInfo(Symbol(), MODE_STOPLEVEL); // This may rise the risk over the requested
    //if (myMaxStoploss < pipStopLoss) pipStopLoss = myMaxStoploss;
    
-   if (myMaxStoploss + delta < pipStopLoss) {
-      //Print ("Buy aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " , myMaxStoploss + delta, " Price ", Ask , " StopPrice ", ASK-pipStopLoss);
+   /*if (myMaxStoploss + delta < pipStopLoss) {
+      Print ("Buy aborted too risque: TO=",  typeDecisionOrder , " / " ,  " SL=", pipStopLoss, " / " , myMaxStoploss + delta, " Price ", Ask , " StopPrice ", ASK-pipStopLoss);
       return (false);
-   }
+   }*/
    
-   closeOrder(Symbol(), "CN", OP_SELL);
-      
    if ( currentNbBuys < maxOpenBuyPosition)
    {   
       if (pipStopLoss != 0 ) StopLossPrice = ASK-pipStopLoss;      
@@ -2271,12 +2268,10 @@ void Sell(double nbLot, int pipStopLoss, int pipTakeProfit, string eaComment, in
    //if (pipStopLoss < STOPLEVEL) pipStopLoss = MarketInfo(Symbol(), MODE_STOPLEVEL); // This may rise the risk over the requested
    //if (myMaxStoploss < pipStopLoss) pipStopLoss = myMaxStoploss;
    
-   if (myMaxStoploss + delta  < pipStopLoss) {
-      //Print ("Sell aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " ,myMaxStoploss + delta, " Price  ", Bid, " StopPrice ", BID+pipStopLoss);
+   /*if (myMaxStoploss + delta  < pipStopLoss) {
+      Print ("Sell aborted too risque: TO=",  typeDecisionOrder , " SL=", pipStopLoss, " / " ,myMaxStoploss + delta, " Price  ", Bid, " StopPrice ", BID+pipStopLoss);
       return(false);
-   }
-   
-   closeOrder(Symbol(), "CU", OP_BUY);
+   }*/
    
    
    if ( currentNbSells < maxOpenSellPosition) {   
@@ -2676,7 +2671,7 @@ void displayComment()
       txt=StringConcatenate( txt, " Trading       : OFF", "\n");
    } 
    txt=StringConcatenate( txt, "---- Magic Number     : ", magicNumber1,  "\n");
-   txt=StringConcatenate( txt, "---- Stop Loss ", myStoploss, " Max " , myMaxStoploss, " Delta : ", delta,  " BreakOutDelta :, " , BreakOutDelta, "\n");
+   txt=StringConcatenate( txt, "---- Stop Loss ", myStoploss, " Max " , myMaxStoploss, " Delta : ", delta,  " BreakOutDelta : " , BreakOutDelta, "\n");
    txt=StringConcatenate( txt, "---- ASK     : ", ASK,  " BID = ", BID, " MY PRICE " , myPrice , "\n");
    
    txt=StringConcatenate( txt, "---- Trading Mode     : >> ", tradeMode,  " << \n");

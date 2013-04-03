@@ -17,7 +17,7 @@ int start()
      {
          if(OrderSelect(i,SELECT_BY_POS,MODE_TRADES)) 
          {
-             OrderModify(OrderTicket(), OrderOpenPrice(), 0,OrderTakeProfit(),NULL);
+             OrderModify(OrderTicket(), OrderOpenPrice(), 0,0,NULL);
          }
      }
 //----

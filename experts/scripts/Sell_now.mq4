@@ -15,8 +15,29 @@ int ticket, n;
 //+------------------------------------------------------------------+
 int start()
   {
+  //getLotSize()
   
-   ticket= OrderSend(Symbol(),OP_SELL,getLotSize(),Bid,3, 0,0, "Manuel Sell" ,230380,0,Red);
+  
+  int magicNumber1;
+
+   if (Symbol() == "FRA40")
+   {     
+      if (Period() == PERIOD_M1){
+         magicNumber1 = 101;
+      }else if (Period() == PERIOD_M5){
+         magicNumber1 = 105;
+      }
+   } else    if (Symbol() == "GER30")   
+   {
+      if (Period() == PERIOD_M1){
+         magicNumber1 = 201;
+      }else if (Period() == PERIOD_M5){
+         magicNumber1 = 205;
+      }
+   }    
+
+   ticket= OrderSend(Symbol(),OP_SELL,1,Bid,3, 0,0, "Manuel Sell" ,magicNumber1,0,Red);
+   
    /*
    if(ticket<0)
    {
