@@ -99,7 +99,7 @@ int init()
          MagicFilter = 399;
       }
    
-   }else if (Symbol() == "US30")
+   }else if (Symbol() == "EUSTX50")
    {
       if  (Period() == PERIOD_M1)
       {
@@ -110,6 +110,19 @@ int init()
       }else
       {
          MagicFilter = 499;
+      }
+   
+   }else if (Symbol() == "US30")
+   {
+      if  (Period() == PERIOD_M1)
+      {
+         MagicFilter = 501;
+      }else if (Period() == PERIOD_M5)
+      {
+         MagicFilter = 505;
+      }else
+      {
+         MagicFilter = 599;
       }   
    }
  

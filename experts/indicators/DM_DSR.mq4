@@ -12,9 +12,6 @@
 #property indicator_color2 Maroon
 #property indicator_color3 DarkGoldenrod
 
-extern string Custom_Indicator = "Dynamic Support/Resistance";
-extern string Copyright = "© 2007, CompassFX, LLC.";
-extern string Web_Address = "www.compassfx.com";
 extern int period = 500;
 
 double g_ibuf_100[];

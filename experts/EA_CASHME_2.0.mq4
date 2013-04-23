@@ -295,7 +295,7 @@ if (Symbol() == "FRA40")
          TrailingStopFast     = 6;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
          delta                = 8;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 5;
+         BreakOutDelta        = 2;
          
          magicNumber1 = 101;
          
@@ -314,13 +314,13 @@ if (Symbol() == "FRA40")
            
          myStoploss=7;
          myTakeProfit=0;
-         myMaxStoploss=10;       
+         myMaxStoploss=20;       
          
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 8;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
          delta                = 10;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 6;
+         BreakOutDelta        = 4;
          
          SymbObjPoint1= 8;
          SymbObjPoint2= 13; 
@@ -329,6 +329,7 @@ if (Symbol() == "FRA40")
          magicNumber1 = 105;
          
          DM_THRESHOLD = 40;
+         Slippage      = 2;
       } else {
          
          gperiod=10;
@@ -385,7 +386,7 @@ if (Symbol() == "FRA40")
          TrailingStopFast     = 8;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
          delta                = 8;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 5;
+         BreakOutDelta        = 4;
          
          SymbObjPoint1= 12;
          SymbObjPoint2= 19; 
@@ -395,6 +396,7 @@ if (Symbol() == "FRA40")
          magicNumber1 = 201;
          
          DM_THRESHOLD = 20;
+         Slippage      = 2;
                            
       }else if (Period() == PERIOD_M5){
          gperiod=7;
@@ -403,13 +405,13 @@ if (Symbol() == "FRA40")
            
          myStoploss=8;
          myTakeProfit=0;
-         myMaxStoploss=15;       
+         myMaxStoploss=45;       
          
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 12;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
          delta                = 12;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 10;
+         BreakOutDelta        = 6;
          
          SymbObjPoint1= 16;
          SymbObjPoint2= 23; 
@@ -418,6 +420,7 @@ if (Symbol() == "FRA40")
          magicNumber1 = 205;
          
          DM_THRESHOLD = 60;
+         Slippage      = 4;
       } else {
          
          gperiod=10;
@@ -458,51 +461,54 @@ if (Symbol() == "FRA40")
       
 }else if (Symbol() == "UK100")
 {
-      if (Period() == PERIOD_M1){
+     if (Period() == PERIOD_M1){
          gperiod=5;
-         pnlSeuil = 12;   
-         pnlSeuilTolerance = 50;
+         pnlSeuil = 15;   
+         pnlSeuilTolerance = 20;
          
          myStoploss=7;
          myTakeProfit=0;
-         myMaxStoploss=8;           
-   
+         myMaxStoploss=15;        
+
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 8;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
-         delta                = 2;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 5;
+         delta                = 8;                          // offset from the fractal or candles or Parabolic 
+         BreakOutDelta        = 4;
+         
+         SymbObjPoint1= 12;
+         SymbObjPoint2= 19; 
+         SymbObjPoint3= 35;
+         
          
          magicNumber1 = 301;
          
-         
-         SymbObjPoint1= 8;
-         SymbObjPoint2= 12; 
-         SymbObjPoint3= 18;         
-         
-         
+         DM_THRESHOLD = 20;
+         Slippage      = 2;
                            
       }else if (Period() == PERIOD_M5){
          gperiod=7;
-         pnlSeuil = 18;   
+         pnlSeuil = 22;   
          pnlSeuilTolerance = 40;
            
-         myStoploss=12;
+         myStoploss=8;
          myTakeProfit=0;
-         myMaxStoploss=20;      
+         myMaxStoploss=45;       
          
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
          TrailingStopFast     = 12;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
-         delta                = 8;                          // offset from the fractal or candles or Parabolic 
-         BreakOutDelta        = 5;
+         delta                = 12;                          // offset from the fractal or candles or Parabolic 
+         BreakOutDelta        = 6;
          
+         SymbObjPoint1= 16;
+         SymbObjPoint2= 23; 
+         SymbObjPoint3= 50;
+        
          magicNumber1 = 305;
          
-         SymbObjPoint1= 13;
-         SymbObjPoint2= 21; 
-         SymbObjPoint3= 34;
-                  
+         DM_THRESHOLD = 60;
+         Slippage      = 4;
       } else {
          
          gperiod=10;
@@ -514,21 +520,111 @@ if (Symbol() == "FRA40")
          myMaxStoploss=30;  
          
          TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
-         TrailingStopFast     = 15;                           // 0 off 
+         TrailingStopFast     = 12;                           // 0 off 
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
-         delta                = 10;                          // offset from the fractal or candles or Parabolic 
+         delta                = 2;                          // offset from the fractal or candles or Parabolic 
          BreakOutDelta        = 5;
          
          magicNumber1 = 399;
-
+         
          SymbObjPoint1= 13;
          SymbObjPoint2= 21; 
-         SymbObjPoint3= 34;        
+         SymbObjPoint3= 34;
+         
+      }     
+            
+      // Traging Hours
+      iStartTradingHourAM=6;
+      iStartTradingMinuteAM=10;
+      
+      iEndTradingHourAM=8;
+      iEndTradingMinuteAM=30;
+      
+      iStartTradingHourPM=12;
+      iStartTradingMinutePM=30;
+      
+      iEndTradingHourPM=16;
+      iEndTradingMinutePM=35;     
+          
+}else if (Symbol() == "EUSTX50") {
+   
+   if (Period() == PERIOD_M1){
+         gperiod=5;
+         pnlSeuil = 30;   
+         pnlSeuilTolerance = 100;
+         
+         myStoploss=3;
+         myTakeProfit=0;
+         myMaxStoploss=10;        
+
+         TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
+         TrailingStopFast     = 6;                           // 0 off 
+         StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
+         delta                = 8;                          // offset from the fractal or candles or Parabolic 
+         BreakOutDelta        = 2;
+         
+         magicNumber1 = 401;
+         
+         SymbObjPoint1= 8;
+         SymbObjPoint2= 12; 
+         SymbObjPoint3= 26;
+         
+         DM_THRESHOLD = 15;
+         
+         //p=-1;
+                  
+      }else if (Period() == PERIOD_M5){
+         gperiod=7;
+         pnlSeuil = 18;   
+         pnlSeuilTolerance = 40;
+           
+         myStoploss=7;
+         myTakeProfit=0;
+         myMaxStoploss=20;       
+         
+         TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
+         TrailingStopFast     = 8;                           // 0 off 
+         StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
+         delta                = 10;                          // offset from the fractal or candles or Parabolic 
+         BreakOutDelta        = 4;
+         
+         SymbObjPoint1= 8;
+         SymbObjPoint2= 13; 
+         SymbObjPoint3= 21;
+        
+         magicNumber1 = 405;
+         
+         DM_THRESHOLD = 40;
+         Slippage      = 2;
+      } else {
+         
+         gperiod=10;
+         pnlSeuil = 12;   
+         pnlSeuilTolerance = 40;   
+              
+         myStoploss=20;
+         myTakeProfit=0;
+         myMaxStoploss=25;  
+         
+         TrailingStopSlow     = pTrailingStopSlow;           // 0 off 
+         TrailingStopFast     = 15;                           // 0 off 
+         StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
+         delta                = 2;                          // offset from the fractal or candles or Parabolic 
+         BreakOutDelta        = 3;
+         
+         SymbObjPoint1= 8;
+         SymbObjPoint2= 15; 
+         SymbObjPoint3= 24;
+         
+         magicNumber1 = 499;
       }     
       
+      // Trade Management
+
+      
       // Traging Hours
-      iStartTradingHourAM=8;
-      iStartTradingMinuteAM=5;
+      iStartTradingHourAM=6;
+      iStartTradingMinuteAM=10;
       
       iEndTradingHourAM=11;
       iEndTradingMinuteAM=00;
@@ -537,7 +633,8 @@ if (Symbol() == "FRA40")
       iStartTradingMinutePM=30;
       
       iEndTradingHourPM=16;
-      iEndTradingMinutePM=35;     
+      iEndTradingMinutePM=35;
+      
       
 }else if (Symbol() == "US30")
 { 
@@ -556,7 +653,7 @@ if (Symbol() == "FRA40")
          delta                = 2;                          // offset from the fractal or candles or Parabolic 
          BreakOutDelta        = 5;
          
-         magicNumber1 = 401;
+         magicNumber1 = 501;
          
          SymbObjPoint1= 10;
          SymbObjPoint2= 20; 
@@ -576,7 +673,7 @@ if (Symbol() == "FRA40")
          StepTrall            = 0;                          // step Thrall, moving not less than StepTrall n 
          delta                = 4;                          // offset from the fractal or candles or Parabolic 
          BreakOutDelta        = 5;
-         magicNumber1 = 405;
+         magicNumber1 = 505;
 
          SymbObjPoint1= 15;
          SymbObjPoint2= 35; 
@@ -598,7 +695,7 @@ if (Symbol() == "FRA40")
          delta                = 6;                          // offset from the fractal or candles or Parabolic 
          BreakOutDelta        = 5;
          
-         magicNumber1 = 499;
+         magicNumber1 = 599;
 
          SymbObjPoint1= 25;
          SymbObjPoint2= 38; 
@@ -1167,6 +1264,7 @@ void stratRetracementBackBone()
       || StringFind(PriceBehavior, "BREAKOUT", 0) >= 0
       || StringFind(PriceBehavior, "PIVOT", 0) >= 0 
       //|| StringFind(PriceBehavior, "BACKBONE", 0) >= 0 
+      || StringFind(PriceBehavior, "MEDIANE", 0) >= 0       
       ) return(NULL);
    
   // STEP 1 : Identification retracement 
@@ -1232,6 +1330,7 @@ void stratDMSupportResistance()
    || StringFind(PriceBehavior, "BREAKOUT", 0) >= 0 
    || StringFind(PriceBehavior, "PIVOT", 0) >= 0 
    //|| StringFind(PriceBehavior, "BACKBONE", 0) >= 0 
+   || StringFind(PriceBehavior, "MEDIANE", 0) >= 0       
    ) return(NULL);
       
    if ((ExtHALowPrevious <= DM_TF_CURR_SUPPORT )
@@ -1247,14 +1346,14 @@ void stratDMSupportResistance()
    if (PriceBehavior == "DYN SUPP/REST - SUPPORT TOUCHE" || PriceBehavior == "DYN SUPP/REST - REBOND SUR SUPPORT")
    {
       //if (ExtHACloseNow < DM_TF_CURR_SUPPORT)  PriceBehavior = "DYN SUPP/REST - CASSAGE SUPPORT";  
-      if (ExtHACloseNow < DM_TF_CURR_SUPPORT || ExtHACloseNow > MASlowNow || flagGaussInd == -1 || ExtHACloseNow < MAFastNow )  PriceBehavior = "";  
+      if (ExtHACloseNow < DM_TF_CURR_SUPPORT || ExtHACloseNow > MASlowNow || flagGaussInd == -1 )  PriceBehavior = "";  
       if (flagHAInd == 1 && ExtHACloseNow > MAFastNow && flagGaussInd == 1 && ExtHACloseNow > DM_TF_CURR_SUPPORT) PriceBehavior = "DYN SUPP/REST - REBOND SUR SUPPORT";      
    }
    
    if (PriceBehavior == "DYN SUPP/REST - RESISTANCE TOUCHE" || PriceBehavior == "DYN SUPP/REST - RETOUR A LA BAISSE")
    {
       //if (ExtHACloseNow > DM_TF_CURR_RESISTANCE)  PriceBehavior = "DYN SUPP/REST - FRANCHISSEMENT RESISTANCE";            
-      if (ExtHACloseNow > DM_TF_CURR_RESISTANCE || ExtHACloseNow < MASlowNow  || flagGaussInd == 1 || ExtHACloseNow > MAFastNow )  PriceBehavior = "";            
+      if (ExtHACloseNow > DM_TF_CURR_RESISTANCE || ExtHACloseNow < MASlowNow  || flagGaussInd == 1 )  PriceBehavior = "";            
       if (flagHAInd == -1 && ExtHACloseNow < MAFastNow && flagGaussInd == -1 && ExtHACloseNow < DM_TF_CURR_RESISTANCE) PriceBehavior = "DYN SUPP/REST - RETOUR A LA BAISSE";      
    }
 
@@ -1272,7 +1371,7 @@ void stratDMSupportResistance()
       && (tradeDecisionCounter > 0 || tradeDecisionOK))  {
       myFiboCondition = 1*p;
       typeDecisionOrder = 2;   
-      myPrice = DM_TF_CURR_SUPPORT;
+      myPrice = DM_TF_CURR_SUPPORT + BreakOutDelta;
       
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    } 
@@ -1281,7 +1380,7 @@ void stratDMSupportResistance()
       && (tradeDecisionCounter > 0 || tradeDecisionOK))  {   
       myFiboCondition = -1*p;
       typeDecisionOrder = 2;    
-      myPrice = DM_TF_CURR_RESISTANCE;
+      myPrice = DM_TF_CURR_RESISTANCE - BreakOutDelta;
         
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    } 
@@ -1327,7 +1426,7 @@ void stratPivotSupportResistance()
       myFiboCondition = 1*p;
       typeDecisionOrder = 3;
       
-      myPrice = currentSupportlevel;
+      myPrice = currentSupportlevel + BreakOutDelta;
       
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    } 
@@ -1336,7 +1435,7 @@ void stratPivotSupportResistance()
       myFiboCondition = -1*p;
       typeDecisionOrder = 3;
       
-      myPrice = currentResistancelevel;
+      myPrice = currentResistancelevel - BreakOutDelta;
       
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    }  
@@ -1352,6 +1451,7 @@ void stratSupportResistanceBreakOut()
    || StringFind(PriceBehavior, "DYN", 0) >= 0
    || StringFind(PriceBehavior, "RETRACEMENT", 0) >= 0 
    || StringFind(PriceBehavior, "PIVOT", 0) >= 0 
+   || StringFind(PriceBehavior, "MEDIANE", 0) >= 0       
    ) return(NULL);
    
    if (flagBreakOutInd == 1) 
@@ -1378,7 +1478,7 @@ void stratSupportResistanceBreakOut()
    if (PriceBehavior == "BREAKOUT - FRANCHISSEMENT RESISTANCE - VALIDER" && (tradeDecisionCounter > 0 || tradeDecisionOK))  {
       myFiboCondition = 1*p;
       typeDecisionOrder = 4;      
-      myPrice = DM_TF_CURR_RESISTANCE;
+      myPrice = DM_TF_CURR_RESISTANCE + BreakOutDelta;
       
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    } 
@@ -1386,7 +1486,7 @@ void stratSupportResistanceBreakOut()
    if (PriceBehavior == "BREAKOUT - CASSAGE SUPPORT - VALIDER" && (tradeDecisionCounter > 0 || tradeDecisionOK))  {
       myFiboCondition = -1*p;
       typeDecisionOrder = 4; 
-      myPrice = DM_TF_CURR_SUPPORT;
+      myPrice = DM_TF_CURR_SUPPORT - BreakOutDelta;
       
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    } 
@@ -1404,6 +1504,7 @@ void stratChandelierHarami()
       || StringFind(PriceBehavior, "DYN", 0) >= 0
       || StringFind(PriceBehavior, "BREAKOUT", 0) >= 0 
       //|| StringFind(PriceBehavior, "BACKBONE", 0) >= 0 
+      
       ) return(NULL);   
    
    if ((ExtHAOpenPrevious > ExtHAOpenNow && ExtHACloseNow > ExtHAClosePrevious
@@ -1437,7 +1538,7 @@ void stratChandelierHarami()
       myFiboCondition = 1*p;
       typeDecisionOrder = 6;  
       
-      myPrice = MAFastNow;
+      myPrice = FractalResNow + BreakOutDelta;
       
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    } 
@@ -1446,7 +1547,7 @@ void stratChandelierHarami()
       myFiboCondition = -1*p;
       typeDecisionOrder = 6;  
       
-      myPrice = MAFastNow;  
+      myPrice = FractalSupNow - BreakOutDelta;  
         
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    }   
@@ -1465,6 +1566,7 @@ void stratBackBoneTrader()
       || StringFind(PriceBehavior, "DYN", 0) >= 0
       || StringFind(PriceBehavior, "BREAKOUT", 0) >= 0
       || StringFind(PriceBehavior, "PIVOT", 0) >= 0 
+      || StringFind(PriceBehavior, "MEDIANE", 0) >= 0       
       ) return(NULL);
    
    //todo
@@ -1506,7 +1608,7 @@ void stratBackBoneTrader()
       myFiboCondition = 1*p;
       typeDecisionOrder = 7;      
       
-      myPrice = BackBoneHigh;
+      myPrice = BackBoneHigh + BreakOutDelta;
       
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
       
@@ -1516,7 +1618,7 @@ void stratBackBoneTrader()
    {
       myFiboCondition = -1*p;
       typeDecisionOrder = 7;
-      myPrice = BackBoneLow;
+      myPrice = BackBoneLow - BreakOutDelta;
       
       if (tradeDecisionCounter == 0) {tradeDecisionCounter = 50; tradeDecisionTag = Time[0];}
    }   
@@ -1575,7 +1677,7 @@ void stratMedianeTrader()
       typeDecisionOrder = 8;
       
       //determination du prix par défaut
-      myPrice = DM_TF_CURR_MIDDLE + BreakOutDelta + Slippage;
+      myPrice = DM_TF_CURR_MIDDLE + BreakOutDelta;
       
       //Ajustement pt d'entrée
       //if( BackBoneHigh - DM_TF_CURR_MIDDLE > 0 && BackBoneHigh - DM_TF_CURR_MIDDLE <= Slippage) myPrice = MASlowNow;
@@ -1590,7 +1692,7 @@ void stratMedianeTrader()
       typeDecisionOrder = 8;
       
       //determination du prix par défaut
-      myPrice = DM_TF_CURR_MIDDLE - BreakOutDelta - Slippage;
+      myPrice = DM_TF_CURR_MIDDLE - BreakOutDelta;
       
       //Ajustement pt d'entrée
       //if( DM_TF_CURR_MIDDLE - BackBoneLow > 0 && DM_TF_CURR_MIDDLE - BackBoneLow <= Slippage) myPrice = MASlowNow;
@@ -1624,7 +1726,7 @@ void getTradeDecision()
       SCENARIO 3: PIVOT ACHAT SUR SUPPORT / VENTE SUR ECHEC RESISTANCE
       TYPE DECISION = 3
    ************************************************** */         
-   //stratPivotSupportResistance();
+   stratPivotSupportResistance();
    
    
    /***************************************************
@@ -1647,7 +1749,7 @@ void getTradeDecision()
       SCENARIO : RETRACEMENT SUR COLONNE VERTEBRALE
       TYPE DECISION = 7
    ************************************************** */   
-   //stratBackBoneTrader();
+   stratBackBoneTrader();
    
    
    /***************************************************
@@ -1747,18 +1849,14 @@ void CheckForOpen()
             comments = putParlist(comments, "TF", Period()); 
             
             
-            ObjectCreate("ORDERSEND-"+Tradecount,OBJ_ARROW,0,Time[0]+Period()*60,myPrice,0,0,0,0);                     
-            ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_ARROWCODE,241);
-            ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_COLOR, DarkGreen);         
+            ObjectCreate("ORDERSEND-"+typeDecisionOrder+"-"+Tradecount,OBJ_ARROW,0,Time[0]+Period()*60,myPrice,0,0,0,0);                     
+            ObjectSet   ("ORDERSEND-"+typeDecisionOrder+"-"+Tradecount,OBJPROP_ARROWCODE,241);
+            ObjectSet   ("ORDERSEND-"+typeDecisionOrder+"-"+Tradecount,OBJPROP_COLOR, DarkGreen);         
          
-            if (alertTag!=Time[0]) 
-            {
-               Buy(myLots, myStoploss, SymbObjPoint1,comments, magicNumber1);    
-               Buy(myLots, myStoploss, SymbObjPoint2,comments, magicNumber1);    
-               Buy(myLots, myStoploss, 0,comments, magicNumber1);    
-            
-               
-            } 
+            Buy(myLots, myStoploss, 0,comments, magicNumber1);    
+            Buy(myLots, myStoploss, 0,comments, magicNumber1);    
+            Buy(myLots, myStoploss, 0,comments, magicNumber1);    
+         
          }
          if (myFiboCondition == -1)  
          {
@@ -1775,18 +1873,13 @@ void CheckForOpen()
             comments = putParlist(comments, "TF", Period()); 
             
             
-            ObjectCreate("ORDERSEND-"+Tradecount,OBJ_ARROW,0,Time[0]+Period()*60,myPrice,0,0,0,0);                     
-            ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_ARROWCODE,242);
-            ObjectSet   ("ORDERSEND-"+Tradecount,OBJPROP_COLOR, FireBrick);            
+            ObjectCreate("ORDERSEND-"+typeDecisionOrder+"-"+Tradecount,OBJ_ARROW,0,Time[0]+Period()*60,myPrice,0,0,0,0);                     
+            ObjectSet   ("ORDERSEND-"+typeDecisionOrder+"-"+Tradecount,OBJPROP_ARROWCODE,242);
+            ObjectSet   ("ORDERSEND-"+typeDecisionOrder+"-"+Tradecount,OBJPROP_COLOR, FireBrick);            
          
-            if (alertTag!=Time[0] )
-            {      
-               Sell(myLots, myStoploss, SymbObjPoint1,comments, magicNumber1);     
-               Sell(myLots, myStoploss, SymbObjPoint2,comments, magicNumber1);     
-               Sell(myLots, myStoploss, 0,comments, magicNumber1);     
-            
-               alertTag=Time[0];
-            }
+            Sell(myLots, myStoploss, 0,comments, magicNumber1);     
+            Sell(myLots, myStoploss, 0,comments, magicNumber1);     
+            Sell(myLots, myStoploss, 0,comments, magicNumber1);     
             
          }      
       }
@@ -1971,7 +2064,7 @@ double SlLastBar(int tip,double price, int pTrailingStop)
          }
       }
       //------------------------------------------------------- by candles
-      /*if (pTrailingStop==1)
+      if (pTrailingStop==3)
       {
          trailingName = "ByCandles";
          if (tip== 1)
@@ -1988,7 +2081,7 @@ double SlLastBar(int tip,double price, int pTrailingStop)
             if (fr!=0) if (price+STOPLEVEL*POINT < fr) break;
             else fr=0;
          }
-      }   */
+      }   
       //------------------------------------------------------- by MVA
       if (pTrailingStop==1)
       {
@@ -2008,7 +2101,7 @@ double SlLastBar(int tip,double price, int pTrailingStop)
          }
       }
       //------------------------------------------------------- by PCH
-      if (pTrailingStop==3)
+      /*if (pTrailingStop==3)
       {
          trailingName = "ByPriceChanel";
          //FibMid=(Fib6[1]+Fib7[1])/2;
@@ -2027,7 +2120,7 @@ double SlLastBar(int tip,double price, int pTrailingStop)
             else fr=0;
          } 
          
-      }
+      }*/
       //------------------------------------------------------- by PSAR
       if (pTrailingStop==-4)
       {
@@ -2464,7 +2557,7 @@ void CheckForClosebyObjectives()
                if ((BID >= tradeBuyObjectives3 && tradeBuyObjectives3 != 0 ) || TradeObjStatus == "BUY_OBJ3_OK" ) {                   
                   TradeObjStatus = "BUY_OBJ3_OK";
                   //CheckForClosebyPnl(30);                  
-                  TrailingStop(1);
+                  TrailingStop(3);
                } else if ((BID >= tradeBuyObjectives2 && tradeBuyObjectives2 != 0) || TradeObjStatus == "BUY_OBJ2_OK" ) {
                   TradeObjStatus = "BUY_OBJ2_OK";
                   //CheckForClosebyPnl(40);
@@ -2482,7 +2575,7 @@ void CheckForClosebyObjectives()
                if ((ASK <= tradeSellObjectives3 && tradeSellObjectives3 != 0) || TradeObjStatus == "SELL_OBJ3_OK" ) {
                   TradeObjStatus = "SELL_OBJ3_OK";
                   //CheckForClosebyPnl(30);
-                  TrailingStop(1);
+                  TrailingStop(3);
                } else if ((ASK <= tradeSellObjectives2 && tradeSellObjectives2 != 0) || TradeObjStatus == "SELL_OBJ2_OK" ){
                   //TradeObjStatus = "SELL_OBJ2_OK";
                   //CheckForClosebyPnl(40);
@@ -2625,14 +2718,23 @@ void securePosition()
 {
    int count;
    bool result;
-   for ( int i=0; i<OrdersTotal(); i++)
+ 
+   // Close one Ordre
+ 
+   // Secure position
+   for (int i=0; i<OrdersTotal(); i++)
    { 
       if(OrderSelect(i,SELECT_BY_POS,MODE_TRADES)) 
       {
          if (OrderSymbol() == Symbol() && magicNumber1 == OrderMagicNumber() && OrderProfit() >= 2 )
          {  
-            //Print ("Securing position ", OrderTicket(), " TYPE ", OrderType(), " OOP " , OrderOpenPrice(), " OSL " , OrderStopLoss(), " PROFIT ", OrderProfit());
-            
+            // close one Order
+            if (currentNbBuys == 3 || currentNbSells == 3){
+               if (OrderType() == OP_BUY) OrderClose(OrderTicket(),OrderLots(), BID, Slippage);
+               if (OrderType() == OP_SELL)OrderClose(OrderTicket(),OrderLots(), ASK, Slippage);
+               
+               CalculateCurrentOrders(SymbolTral);
+            }
             if (OrderType() == OP_BUY && OrderStopLoss() < OrderOpenPrice()) 
                result = OrderModify(OrderTicket(),OrderOpenPrice(),OrderOpenPrice(),OrderTakeProfit(),NULL);            
                
@@ -2688,7 +2790,10 @@ void displayComment()
    txt=StringConcatenate(txt,"===== [ MARKET PARAMETERS ] ===== \n"); 
    txt=StringConcatenate( txt, " Price Direction : ", PriceDirection , "\n");    
    txt=StringConcatenate( txt, " Trend Direction : ", TrendDirection , "\n");     
-   txt=StringConcatenate( txt, " Price Behavior : ", "Counter " , tradeDecisionCounter, " OK :" , tradeDecisionOK, " Type = " , typeDecisionOrder, " ", PriceBehavior , " ", Time[0]-tradeDecisionTag, "\n");  
+   
+   if ( PriceBehavior != "")
+   txt=StringConcatenate( txt, " Price Behavior : ", "Counter " , tradeDecisionCounter, " OK :" , tradeDecisionOK, " Type = " , typeDecisionOrder, " ", PriceBehavior , "  ", Time[0]-tradeDecisionTag, ", Condition ", myFiboCondition, "\n");  
+
    txt=StringConcatenate( txt, " Pivot Resistance ", currentResistancelevel , "\n");           
    txt=StringConcatenate( txt, " Pivot Support ", currentSupportlevel , "\n");           
    txt=StringConcatenate(txt,"========================================= \n"); 
